@@ -1,23 +1,32 @@
 pipeline {
     agent any
+
     stages {
+        // Stage 1: Build the .NET project
         stage('Build') {
             steps {
                 script {
-                    sh 'dotnet build WebApplication1.sln'
+                    // Run the build command for your .NET solution
+                    sh 'dotnet build AdventureWorks.sln'
                 }
             }
         }
+
+        // Stage 2: Build Docker image
         stage('Docker Build') {
             steps {
                 script {
-                    sh 'docker build -t WebApplication1-name .'
+                    // Build the Docker image with the specified name
+                    sh 'docker build -t adventureworks-api .'
                 }
             }
         }
+
+        // Stage 3: Deploy to Staging using Docker Compose
         stage('Deploy to Staging') {
             steps {
                 script {
+                    // Build and run the containers using Docker Compose
                     sh 'docker-compose up --build -d'
                 }
             }
